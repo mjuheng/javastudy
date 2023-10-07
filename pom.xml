@@ -11,22 +11,24 @@
     </modules>
 
     <properties>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>1.8</java.version>
-        <spring-cloud.version>Hoxton.SR12</spring-cloud.version>
-        <spring-boot.version>2.3.4.RELEASE</spring-boot.version>
-        <spring-cloud-ailibaba.version>2.2.5.RELEASE</spring-cloud-ailibaba.version>
-        <mysql.version>5.1.47</mysql.version>
-        <mybatis.version>2.1.1</mybatis.version>
+        <java.version>17</java.version>
+        <spring-cloud.version>2022.0.4</spring-cloud.version>
+        <spring-boot.version>3.1.2</spring-boot.version>
+        <spring-cloud-ailibaba.version>2022.0.0.0</spring-cloud-ailibaba.version>
+        <mysql.version>8.0.32</mysql.version>
+        <mybatis.version>3.0.2</mybatis.version>
         <fastjson.version>2.0.34</fastjson.version>
         <druid.version>1.2.2</druid.version>
-        <mybatis-plus.version>3.4.3.4</mybatis-plus.version>
+        <mybatis-plus.version>3.5.3.1</mybatis-plus.version>
         <lombok.version>1.18.22</lombok.version>
         <hutool-all.version>5.8.20</hutool-all.version>
+        <poi-ooxml.version>5.2.3</poi-ooxml.version>
+        <aviator.version>5.3.1</aviator.version>
     </properties>
 
 
@@ -94,6 +96,16 @@
                 <groupId>cn.hutool</groupId>
                 <artifactId>hutool-all</artifactId>
                 <version>${hutool-all.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi-ooxml</artifactId>
+                <version>${poi-ooxml.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.googlecode.aviator</groupId>
+                <artifactId>aviator</artifactId>
+                <version>${aviator.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

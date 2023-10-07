@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  */
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
 @EnableTransactionManagement
-@MapperScan("com.huangch.base.mapper")
+@MapperScan(basePackages = "com.huangch.base.mapper")
 public class BaseApplication {
 
     public static void main(String[] args) {

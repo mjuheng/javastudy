@@ -1,7 +1,8 @@
 package com.huangch.cloud.controller;
 
-import com.huangch.cloud.utils.id.IdWorker;
-import org.springframework.web.bind.annotation.GetMapping;
+import com.huangch.cloud.pojo.User;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -11,9 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class DemoController {
 
-    @GetMapping("/idWork")
-    public String idWork() {
-        IdWorker idWorker = new IdWorker(1L);
-        return String.valueOf(idWorker.nextId());
+    @PostMapping("/idWork")
+    public User idWork(@RequestBody User user) {
+        return user;
     }
 }

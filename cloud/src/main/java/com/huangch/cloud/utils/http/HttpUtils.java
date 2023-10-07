@@ -1,18 +1,37 @@
 package com.huangch.cloud.utils.http;
 
-
 import com.alibaba.fastjson2.JSON;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * HTTP请求工具类
+ *
+ * @author huangch
+ * @date 2023-09-19
+ */
+@SuppressWarnings({"ExtractMethodRecommender", "unchecked", "unused", "UnusedReturnValue"})
 public class HttpUtils {
 
-    public static <T> T sendGet(String url, Map<String, String> headers, Map<String, String> params, Class<T> clazz) throws Exception {
+    /**
+     * 发送GET请求
+     *
+     * @param url     请求地址
+     * @param params  请求参数
+     * @param headers 请求头
+     * @param clazz   返回值强转的类型
+     * @param <T>     返回值强转的类型
+     * @return Response Data
+     * @throws IOException 连接异常
+     */
+    public static <T> T sendGet(String url, Map<String, String> params, Map<String, String> headers, Class<T> clazz) throws IOException {
         StringBuilder sb = new StringBuilder(url);
         if (params != null) {
             sb.append("?");
@@ -26,17 +45,16 @@ public class HttpUtils {
         }
 
         URL obj = new URL(sb.toString());
-        HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-        con.setRequestMethod("GET");
+        HttpURLConnection conn = (HttpURLConnection) obj.openConnection();
+        conn.setRequestMethod("GET");
 
         if (headers != null) {
             for (Map.Entry<String, String> entry : headers.entrySet()) {
-                con.setRequestProperty(entry.getKey(), entry.getValue());
+                conn.setRequestProperty(entry.getKey(), entry.getValue());
             }
         }
 
-
-        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+        BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
         StringBuilder response = new StringBuilder();
         String inputLine;
         while ((inputLine = in.readLine()) != null) {
@@ -51,29 +69,36 @@ public class HttpUtils {
         }
     }
 
-    public static <T> T sendPost(String url, Map<String, String> params, Map<String, String> headers, Class<T> clazz) throws Exception {
+    /**
+     * 发送POST JSON请求
+     *
+     * @param url     请求地址
+     * @param params  请求参数
+     * @param headers 请求头
+     * @param clazz   返回值强转的类型
+     * @param <T>     返回值强转的类型
+     * @return Response Data
+     * @throws IOException 连接异常
+     */
+    public static <T> T sendPost(String url, Map<String, String> params, Map<String, String> headers, Class<T> clazz) throws IOException {
         URL obj = new URL(url);
-        HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-        con.setRequestMethod("POST");
-        con.setDoOutput(true);
-        if (headers != null) {
-            for (Map.Entry<String, String> entry : headers.entrySet()) {
-                con.setRequestProperty(entry.getKey(), entry.getValue());
-            }
+        HttpURLConnection conn = (HttpURLConnection) obj.openConnection();
+        conn.setRequestMethod("POST");
+        conn.setDoOutput(true);
+
+        if (headers == null) {
+            headers = new HashMap<>();
+        }
+        headers.putIfAbsent("Content-Type", "application/json");
+        for (Map.Entry<String, String> entry : headers.entrySet()) {
+            conn.setRequestProperty(entry.getKey(), entry.getValue());
         }
 
-        StringBuilder postData = new StringBuilder();
-        for (Map.Entry<String, String> param : params.entrySet()) {
-            if (postData.length() != 0) postData.append('&');
-            postData.append(param.getKey());
-            postData.append('=');
-            postData.append(param.getValue());
+        if (params != null) {
+            conn.getOutputStream().write(JSON.toJSONString(params).getBytes(StandardCharsets.UTF_8));
         }
-        byte[] postDataBytes = postData.toString().getBytes(StandardCharsets.UTF_8);
 
-        con.getOutputStream().write(postDataBytes);
-
-        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+        BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
         StringBuilder response = new StringBuilder();
         String inputLine;
         while ((inputLine = in.readLine()) != null) {
