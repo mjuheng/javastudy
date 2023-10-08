@@ -1,0 +1,19 @@
+server:
+  port: 8000
+spring:
+  application:
+    name: cloud-gateway
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+        username: nacos
+        password: nacos
+    gateway:
+      routes:
+        - id: cloud-base
+          uri: lb://cloud-base
+          predicates:
+            - Path=/cloud-base/**
+          filters:
+            - StripPrefix=1

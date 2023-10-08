@@ -4,3 +4,8 @@ server:
     key-store: classpath:ssl/server.jks
     key-store-password: 123456
     key-store-type: JKS
+logging:
+  level:
+    com:
+      huangch:
+        cloud: debug

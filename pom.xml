@@ -8,6 +8,7 @@
     <modules>
         <module>cloud</module>
         <module>cloud-base</module>
+        <module>cloud-gateway</module>
     </modules>
 
     <properties>
