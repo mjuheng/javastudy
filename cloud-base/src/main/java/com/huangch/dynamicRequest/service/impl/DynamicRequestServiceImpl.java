@@ -33,7 +33,7 @@ public class DynamicRequestServiceImpl implements DynamicRequestService {
         //通过Spring IOC容器获取对应的bean实例
         Object bean = applicationContext.getBean(model.getBeanName());
         try {
-            Method method = bean.getClass().getMethod(model.getMethod());
+            Method method = bean.getClass().getDeclaredMethod(model.getMethod());
             //注册Mapping信息逻辑
             requestMappingHandlerMapping.registerMapping(mappingInfo, bean, bean.getClass().getDeclaredMethod(model.getMethod()));
         } catch (NoSuchMethodException e) {
