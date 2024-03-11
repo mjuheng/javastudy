@@ -1,19 +1,35 @@
 package com.huangch.cloud.utils.tree;
 
+import cn.hutool.core.collection.CollUtil;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
+ * 树工具类
+ *
  * @author huangch
  * @since 2023-11-16
  */
 @SuppressWarnings("unchecked")
 public class TreeUtils {
 
-    public static <N, TN, R, C extends List<TN>> List<TN> buildByRecursive(List<TN> treeNodes,
-                                                                           N root,
+    /**
+     * 将列表转换成树结构
+     *
+     * @param treeNodes         列表
+     * @param root              根节点id
+     * @param getIdColumn       获取数据id列
+     * @param getParentColumn   获取数据父id列
+     * @param getChildrenColumn 获取数据子列表列
+     * @param setChildrenColumn 设置数据子列表列
+     * @return 树型结构
+     */
+    public static <TN, R, C extends List<TN>> List<TN> buildByRecursive(List<TN> treeNodes,
+                                                                        R root,
                                                                            Function<TN, R> getIdColumn,
                                                                            Function<TN, R> getParentColumn,
                                                                            Function<TN, C> getChildrenColumn,
@@ -28,6 +44,17 @@ public class TreeUtils {
         return trees;
     }
 
+    /**
+     * 获取某个节点的所有子孙数据
+     *
+     * @param treeNode          目标节点
+     * @param treeNodes         树数据
+     * @param getIdColumn       获取数据id列
+     * @param getParentColumn   获取数据父id列
+     * @param getChildrenColumn 获取数据子列表列
+     * @param setChildrenColumn 设置数据子列表列
+     * @return 树型结构
+     */
     public static <TN, R, C extends List<TN>> TN findChildren(TN treeNode,
                                                               List<TN> treeNodes,
                                                               Function<TN, R> getIdColumn,
@@ -46,4 +73,26 @@ public class TreeUtils {
         }
         return treeNode;
     }
+
+    /**
+     * 遍历树数据
+     *
+     * @param treeNodes         树数据
+     * @param consumer          每个节点的动作
+     * @param getChildrenColumn 获取数据子列表列
+     */
+    public static <TN, C extends List<TN>> void traversalRecursive(List<TN> treeNodes,
+                                                                   Consumer<TN> consumer,
+                                                                   Function<TN, C> getChildrenColumn) {
+        if (CollUtil.isEmpty(treeNodes)) {
+            return;
+        }
+        for (TN node : treeNodes) {
+            consumer.accept(node);
+
+            List<TN> children = getChildrenColumn.apply(node);
+            traversalRecursive(children, consumer, getChildrenColumn);
+        }
+    }
+
 }

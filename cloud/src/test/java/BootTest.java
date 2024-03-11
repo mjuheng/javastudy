@@ -1,33 +1,34 @@
-import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.NumberUtil;
 import com.huangch.cloud.BootApplication;
-import com.huangch.cloud.utils.queue.DelayQueueUtils;
+import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.ApplicationContext;
 
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
+import java.math.BigDecimal;
+import java.util.concurrent.CyclicBarrier;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * @author huangch
  * @date 2023-07-31
  */
+@SuppressWarnings("all")
 @SpringBootTest(classes = BootApplication.class)
 public class BootTest {
 
+    @Resource
+    private ApplicationContext applicationContext;
+    ReentrantLock reentrantLock = new ReentrantLock();
+
+
     @Test
-    public void test() throws Exception {
-        System.out.println("存入：" + DateUtil.format(new Date(), "yyyy-MM-dd HH:mm:ss"));
-        DelayQueueUtils delayQueueUtils = new DelayQueueUtils();
-        delayQueueUtils.delay(() -> {
-            System.out.println("消费1：" + DateUtil.format(new Date(), "yyyy-MM-dd HH:mm:ss"));
-            return null;
-        }, 10L, TimeUnit.SECONDS);
-        delayQueueUtils.delay(() -> {
-            System.out.println("消费2：" + DateUtil.format(new Date(), "yyyy-MM-dd HH:mm:ss"));
-            return null;
-        }, 3L, TimeUnit.SECONDS);
+    public void demo() throws Exception {
+        CyclicBarrier cyclicBarrier = new CyclicBarrier(1);
+        cyclicBarrier.await();
 
-        Thread.sleep(20 * 1000);
+        Condition condition = reentrantLock.newCondition();
+        NumberUtil.toStr(new BigDecimal("2"));
     }
-
 }

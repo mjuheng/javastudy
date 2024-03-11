@@ -4,7 +4,9 @@ import com.alibaba.excel.annotation.ExcelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.web.multipart.MultipartFile;
+import lombok.experimental.Accessors;
+
+import java.util.Date;
 
 /**
  * @author huangch
@@ -13,9 +15,10 @@ import org.springframework.web.multipart.MultipartFile;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Accessors(chain = true)
 public class User {
 
-    @ExcelProperty("姓名")
+    @ExcelProperty({"基本信息", "姓名"})
     private String name;
 
     @ExcelProperty("年龄")
@@ -24,5 +27,5 @@ public class User {
     @ExcelProperty("中共党员")
     private Boolean userPartyMember = true;
 
-    private MultipartFile file;
+    private Date createTime;
 }
