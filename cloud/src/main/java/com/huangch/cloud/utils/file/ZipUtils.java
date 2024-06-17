@@ -1,10 +1,16 @@
 package com.huangch.cloud.utils.file;
 
+import com.huangch.cloud.utils.http.HttpUtils;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.List;
+import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -16,7 +22,7 @@ import java.util.zip.ZipOutputStream;
 @Slf4j
 public class ZipUtils {
 
-    private static final int BUFFER_SIZE = 2 * 1024;
+    private static final int BUFFER_SIZE = 4 * 1024;
 
     /**
      * 压缩成ZIP
@@ -77,10 +83,56 @@ public class ZipUtils {
                         compress(file, zos, name + "/" + file.getName(), keepDirStructure);
                     } else {
                         compress(file, zos, file.getName(), keepDirStructure);
-
                     }
                 }
             }
         }
     }
+
+    /**
+     * 从url下载文件并压缩
+     *
+     * @param fileUrlMap 文件信息
+     * @param os         输出流
+     * @throws Exception exception
+     */
+    public static void toZipByUrl(Map<String, List<FileUrl>> fileUrlMap, OutputStream os) throws Exception {
+        try (ZipOutputStream zos = new ZipOutputStream(os)) {
+            for (Map.Entry<String, List<FileUrl>> fileUrlEntry : fileUrlMap.entrySet()) {
+
+                String folder = fileUrlEntry.getKey();
+                List<FileUrl> fileUrlNameList = fileUrlEntry.getValue();
+
+                for (FileUrl fileUrl : fileUrlNameList) {
+                    zos.putNextEntry(new ZipEntry(folder + File.separator + fileUrl.getName()));
+                    InputStream in = HttpUtils.sendGet(fileUrl.getUrl(), null, null);
+
+                    int len;
+                    byte[] buf = new byte[BUFFER_SIZE];
+                    while ((len = in.read(buf)) != -1) {
+                        zos.write(buf, 0, len);
+                    }
+                    zos.flush();
+                    zos.closeEntry();
+                    in.close();
+                }
+            }
+        }
+    }
+
+    @Data
+    @NoArgsConstructor
+    public static class FileUrl {
+
+        private String url;
+
+        private String name;
+
+        public FileUrl(String url, String name) {
+            this.url = url;
+            this.name = name;
+        }
+    }
+
+
 }

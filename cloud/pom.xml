@@ -14,6 +14,11 @@
             <name>Aspose Java API</name>
             <url>https://releases.aspose.com/java/repo/</url>
         </repository>
+        <repository>
+            <id>com.e-iceblue</id>
+            <name>e-iceblue</name>
+            <url>https://repo.e-iceblue.com/nexus/content/groups/public/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -67,6 +72,14 @@
             <groupId>com.alibaba</groupId>
             <artifactId>easyexcel</artifactId>
         </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.minio</groupId>
+            <artifactId>minio</artifactId>
+        </dependency>
         <!-- 使用JUnit 5 -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -84,30 +97,23 @@
         <dependency>
             <groupId>javax.validation</groupId>
             <artifactId>validation-api</artifactId>
-            <version>2.0.1.Final</version>
         </dependency>
         <dependency>
             <groupId>org.javassist</groupId>
             <artifactId>javassist</artifactId>
-            <version>3.27.0-GA</version>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>com.aspose</groupId>-->
-<!--            <artifactId>aspose-words</artifactId>-->
-<!--            <version>14.9.0-jdk16</version>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>com.aspose</groupId>-->
-<!--            <artifactId>aspose-words</artifactId>-->
-<!--            <version>24.1</version>-->
-<!--            <classifier>jdk17</classifier>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>caffeine</artifactId>
+        </dependency>
         <dependency>
             <groupId>com.aspose</groupId>
-            <artifactId>aspose-words</artifactId>
+            <artifactId>aspose-pdf</artifactId>
             <version>21.11</version>
-            <scope>system</scope>
-            <systemPath>${pom.basedir}/libs/aspose-words-21.11-jdk17.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>com.deepoove</groupId>
+            <artifactId>poi-tl</artifactId>
         </dependency>
 
     </dependencies>

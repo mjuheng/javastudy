@@ -1,16 +1,14 @@
 package com.huangch.cloud.controller;
 
-import cn.hutool.core.io.IoUtil;
-import com.huangch.cloud.pojo.User;
-import com.huangch.cloud.service.IUserService;
-import jakarta.annotation.Resource;
+import com.huangch.cloud.utils.file.ZipUtils;
+import com.huangch.cloud.utils.servlet.ServletUtils;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author huangch
@@ -19,18 +17,17 @@ import java.io.IOException;
 @RestController
 public class DemoController {
 
-    @Resource
-    private IUserService userService;
 
     @GetMapping("/echo")
-    public void echo() {
-        userService.echo();
-    }
+    public void echo(HttpServletResponse response) throws Exception {
 
-    @PostMapping(value = "/form/submit")
-    public void submit(User user, HttpServletResponse response) throws IOException {
-        ByteArrayInputStream bais = new ByteArrayInputStream("hello world".getBytes());
-        IoUtil.copy(bais, response.getOutputStream());
+        Map<String, List<ZipUtils.FileUrl>> fileUrlMap = new HashMap<>();
+        // fileUrlMap.put("folder1", Lists.newArrayList(new ZipUtils.FileUrl("http://localhost:8082/minio/download", "demo.xlsx"), new ZipUtils.FileUrl("http://localhost:8082/minio/download", "demo.xlsx")));
+        // fileUrlMap.put("folder2", Lists.newArrayList(new ZipUtils.FileUrl("http://localhost:8082/minio/download", "demo.xlsx")));
+
+        ServletUtils.setResponseToDownload("a.zip", response);
+        ZipUtils.toZipByUrl(fileUrlMap, response.getOutputStream());
+
     }
 
 
