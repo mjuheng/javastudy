@@ -115,6 +115,16 @@
             <groupId>com.deepoove</groupId>
             <artifactId>poi-tl</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.zyaud.fzhx</groupId>
+            <artifactId>fzhx-jdbc</artifactId>
+            <version>1.7.3-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.kingbase</groupId>
+            <artifactId>kingbase8</artifactId>
+            <version>8.6.0</version>
+        </dependency>
 
     </dependencies>
 

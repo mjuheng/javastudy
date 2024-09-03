@@ -60,4 +60,38 @@ public class DateUtils extends LocalDateTimeUtil {
         cal.roll(Calendar.DAY_OF_MONTH, -1);
         return cal.getTime();
     }
+
+    /**
+     * 去除 Date 对象的时分秒和毫秒部分，将其设置为零
+     *
+     * @param date 要处理的 Date 对象
+     * @return 处理后的 Date 对象，不包含时分秒和毫秒
+     */
+    public static Date truncateTime(Date date) {
+        if (date == null) {
+            return null;
+        }
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+
+        return calendar.getTime();
+    }
+
+    /**
+     * 计算两个时间相差天数
+     *
+     * @param beginDate 开始时间
+     * @param endDate   结束时间
+     * @return 相差天数，begin > endDate.正数，反之负数
+     */
+    public static int getDifferenceInDays(Date beginDate, Date endDate) {
+        beginDate = truncateTime(beginDate);
+        endDate = truncateTime(endDate);
+        return (int) ((beginDate.getTime() - endDate.getTime()) / (24 * 60 * 60 * 1000));
+    }
 }

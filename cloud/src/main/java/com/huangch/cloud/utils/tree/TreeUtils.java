@@ -2,8 +2,7 @@ package com.huangch.cloud.utils.tree;
 
 import cn.hutool.core.collection.CollUtil;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -30,18 +29,35 @@ public class TreeUtils {
      */
     public static <TN, R, C extends List<TN>> List<TN> buildByRecursive(List<TN> treeNodes,
                                                                         R root,
-                                                                           Function<TN, R> getIdColumn,
-                                                                           Function<TN, R> getParentColumn,
-                                                                           Function<TN, C> getChildrenColumn,
-                                                                           BiConsumer<TN, C> setChildrenColumn) {
-        List<TN> trees = new ArrayList<>();
-
-        for (TN treeNode : treeNodes) {
-            if (root.equals(getParentColumn.apply(treeNode))) {
-                trees.add(findChildren(treeNode, treeNodes, getIdColumn, getParentColumn, getChildrenColumn, setChildrenColumn));
-            }
+                                                                        Function<TN, R> getIdColumn,
+                                                                        Function<TN, R> getParentColumn,
+                                                                        Function<TN, C> getChildrenColumn,
+                                                                        BiConsumer<TN, C> setChildrenColumn) {
+        if (treeNodes == null || treeNodes.isEmpty()) {
+            return Collections.emptyList();
         }
-        return trees;
+
+        Map<R, TN> idNodeMap = new HashMap<>();
+        for (TN node : treeNodes) {
+            idNodeMap.put(getIdColumn.apply(node), node);
+        }
+
+        List<TN> rootNodes = new ArrayList<>();
+        for (TN node : treeNodes) {
+            TN parentNode = idNodeMap.get(getParentColumn.apply(node));
+            R id = getIdColumn.apply(node);
+            if (parentNode != null && !id.equals(getParentColumn.apply(node))) {
+                if (getChildrenColumn.apply(parentNode) == null) {
+                    setChildrenColumn.accept(parentNode, (C) new ArrayList<TN>());
+                }
+                getChildrenColumn.apply(parentNode).add(node);
+            } else if (root.equals(id)) {
+                rootNodes.add(node);
+            }
+
+        }
+        return rootNodes;
+
     }
 
     /**
