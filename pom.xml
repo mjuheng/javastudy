@@ -9,6 +9,8 @@
         <module>cloud</module>
         <module>cloud-base</module>
         <module>cloud-gateway</module>
+        <module>base</module>
+        <module>zyaud</module>
     </modules>
 
     <properties>
@@ -39,6 +41,7 @@
         <easyexcel.version>3.3.2</easyexcel.version>
         <junit-jupiter-engine.version>5.7.2</junit-jupiter-engine.version>
         <transmittable-thread-local.version>2.14.4</transmittable-thread-local.version>
+        <swagger.version>2.9.2</swagger.version>
     </properties>
 
 
@@ -176,6 +179,16 @@
                 <groupId>com.alibaba</groupId>
                 <artifactId>transmittable-thread-local</artifactId>
                 <version>${transmittable-thread-local.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger2</artifactId>
+                <version>${swagger.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger-ui</artifactId>
+                <version>${swagger.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

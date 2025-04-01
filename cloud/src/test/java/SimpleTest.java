@@ -17,7 +17,7 @@ public class SimpleTest {
     @SneakyThrows
     @Test
     public void test() {
-        System.out.println(",qsqs".split(",").length);
+
     }
 
     @Test

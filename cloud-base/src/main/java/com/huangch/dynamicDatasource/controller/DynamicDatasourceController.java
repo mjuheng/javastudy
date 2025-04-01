@@ -1,6 +1,5 @@
 package com.huangch.dynamicDatasource.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.huangch.base.model.Student;
 import com.huangch.base.service.StudentService;
 import com.huangch.dynamicDatasource.service.DynamicDataSourceService;
@@ -27,9 +26,5 @@ public class DynamicDatasourceController {
     @Transactional(rollbackFor = RuntimeException.class)
     @GetMapping("/insertStudent")
     public void insertStudent(Student student) {
-        studentService.saveOrUpdate(new Student().setAge(20)
-                , new LambdaQueryWrapper<Student>()
-                        .eq(Student::getAge, 99)
-        );
     }
 }

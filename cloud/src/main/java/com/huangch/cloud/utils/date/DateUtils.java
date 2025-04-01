@@ -61,6 +61,28 @@ public class DateUtils extends LocalDateTimeUtil {
         return cal.getTime();
     }
 
+
+    /**
+     * 获取时间当天的最后一刻
+     *
+     * @param date 时间
+     * @return 处理后的Date对象
+     */
+    public static Date dateOfLast(Date date) {
+        if (date == null) {
+            return null;
+        }
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+        calendar.set(Calendar.MILLISECOND, 59);
+
+        return calendar.getTime();
+    }
+
     /**
      * 去除 Date 对象的时分秒和毫秒部分，将其设置为零
      *
