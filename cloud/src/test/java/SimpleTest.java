@@ -17,7 +17,8 @@ public class SimpleTest {
     @SneakyThrows
     @Test
     public void test() {
-
+        String partTimeJobPattern = "^\\d{4}-(0[1-9]|1[0-2])\\s\\d{4}-(0[1-9]|1[0-2])$";
+        System.out.println("2020-01 2025-01".matches(partTimeJobPattern));
     }
 
     @Test
@@ -33,6 +34,5 @@ public class SimpleTest {
             System.out.println(HttpUtils.sendPost("http://172.17.1.214:30284/workflow/instance/delete", params, new HashMap<>(), String.class));
         }
     }
-
 
 }

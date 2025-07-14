@@ -11,7 +11,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiConsumer;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 /**
@@ -50,7 +52,7 @@ public class ZipUtils {
      * @param keepDirStructure 是否保留原来的目录结构,true:保留目录结构;
      *                         false:所有文件跑到压缩包根目录下(注意：不保留目录结构可能会出现同名文件,会压缩失败)
      */
-    public static void compress(File sourceFile, ZipOutputStream zos, String name, boolean keepDirStructure) throws Exception {
+    private static void compress(File sourceFile, ZipOutputStream zos, String name, boolean keepDirStructure) throws Exception {
         byte[] buf = new byte[BUFFER_SIZE];
         if (sourceFile.isFile()) {
             // 向zip输出流中添加一个zip实体，构造器中name为zip实体的文件的名字
@@ -116,6 +118,23 @@ public class ZipUtils {
                     zos.closeEntry();
                     in.close();
                 }
+            }
+        }
+    }
+
+    /**
+     * 解压文件
+     *
+     * @param in       压缩包输入流
+     * @param consumer 每个文件处理逻辑
+     * @throws Exception exception
+     */
+    public static void unZip(InputStream in, BiConsumer<ZipEntry, ZipInputStream> consumer) throws Exception {
+        try (ZipInputStream zis = new ZipInputStream(in)) {
+            ZipEntry entry;
+            while ((entry = zis.getNextEntry()) != null) {
+                consumer.accept(entry, zis);
+                zis.closeEntry();
             }
         }
     }
