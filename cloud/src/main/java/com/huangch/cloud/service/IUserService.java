@@ -6,5 +6,5 @@ package com.huangch.cloud.service;
  */
 public interface IUserService {
 
-    void echo();
+    String echo();
 }

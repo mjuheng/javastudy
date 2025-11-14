@@ -1,6 +1,8 @@
+import com.google.common.collect.Lists;
 import com.huangch.cloud.utils.http.HttpUtils;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -17,8 +19,12 @@ public class SimpleTest {
     @SneakyThrows
     @Test
     public void test() {
-        String partTimeJobPattern = "^\\d{4}-(0[1-9]|1[0-2])\\s\\d{4}-(0[1-9]|1[0-2])$";
-        System.out.println("2020-01 2025-01".matches(partTimeJobPattern));
+        String parentIds = "2d3f5476-9f14-4a2a-88d6-79adaa95b07b,";
+        if (StringUtils.isBlank(parentIds) || "-1".equals(parentIds)) {
+            System.out.println("1");
+        }
+        long levels = Lists.newArrayList(parentIds.split(",")).stream().filter(StringUtils::isNotBlank).count() + 1;
+        System.out.println(levels);
     }
 
     @Test

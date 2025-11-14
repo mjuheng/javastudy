@@ -4,11 +4,9 @@ import com.huangch.cloud.utils.http.HttpUtils;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
@@ -135,6 +133,45 @@ public class ZipUtils {
             while ((entry = zis.getNextEntry()) != null) {
                 consumer.accept(entry, zis);
                 zis.closeEntry();
+            }
+        }
+    }
+
+
+    /**
+     * 从下载文件并压缩
+     *
+     * @param streamMap 文件信息 key.文件夹名称 key.文件名 value.文件流
+     * @param os        输出流
+     * @throws Exception exception
+     */
+    public static void toZipFromStream(Map<String, Map<String, byte[]>> streamMap, OutputStream os) throws Exception {
+        try (ZipOutputStream zos = new ZipOutputStream(os)) {
+
+            for (Map.Entry<String, Map<String, byte[]>> streamEntry : streamMap.entrySet()) {
+
+                String folder = StringUtils.isBlank(streamEntry.getKey()) ? StringUtils.EMPTY : streamEntry.getKey();
+                Map<String, byte[]> streamList = streamEntry.getValue();
+
+
+                for (Map.Entry<String, byte[]> entry : streamList.entrySet()) {
+                    String fileName = entry.getKey();
+                    byte[] bytes = entry.getValue();
+
+                    String dest = StringUtils.isEmpty(folder) ? fileName : folder + File.separator + fileName;
+                    zos.putNextEntry(new ZipEntry(dest));
+
+                    InputStream in = new ByteArrayInputStream(bytes);
+                    int len;
+                    byte[] buf = new byte[BUFFER_SIZE];
+                    while ((len = in.read(buf)) != -1) {
+                        zos.write(buf, 0, len);
+                    }
+
+                    zos.flush();
+                    zos.closeEntry();
+                    in.close();
+                }
             }
         }
     }

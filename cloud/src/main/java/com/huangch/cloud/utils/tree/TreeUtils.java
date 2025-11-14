@@ -2,13 +2,7 @@ package com.huangch.cloud.utils.tree;
 
 import cn.hutool.core.collection.CollUtil;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -98,13 +92,13 @@ public class TreeUtils {
     }
 
     /**
-     * 遍历树数据
+     * 深度遍历树数据
      *
      * @param treeNodes         树数据
      * @param consumer          每个节点的动作
      * @param getChildrenColumn 获取数据子列表列
      */
-    public static <TN, C extends List<TN>> void traversalRecursive(List<TN> treeNodes,
+    public static <TN, C extends List<TN>> void depthFirstTraversal(List<TN> treeNodes,
                                                                    Consumer<TN> consumer,
                                                                    Function<TN, C> getChildrenColumn) {
         if (CollUtil.isEmpty(treeNodes)) {
@@ -114,7 +108,7 @@ public class TreeUtils {
             consumer.accept(node);
 
             List<TN> children = getChildrenColumn.apply(node);
-            traversalRecursive(children, consumer, getChildrenColumn);
+            depthFirstTraversal(children, consumer, getChildrenColumn);
         }
     }
 

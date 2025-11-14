@@ -1,4 +1,4 @@
-import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.io.FileUtil;
 import com.huangch.BaseApplication;
 import com.huangch.base.service.StudentService;
 import org.junit.jupiter.api.Test;
@@ -18,11 +18,7 @@ public class BootTest {
 
     @Test
     public void test() throws Exception {
-        for (int i = 0; i < 16; i++) {
-            Thread.sleep(500);
-            System.out.println(IdUtil.getSnowflake().nextIdStr());
-        }
-
+        System.out.println(FileUtil.mainName("aaaa.xlsx"));
     }
 
 }

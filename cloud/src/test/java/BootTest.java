@@ -1,13 +1,10 @@
+import cn.hutool.core.util.IdUtil;
 import com.huangch.cloud.BootApplication;
 import com.huangch.cloud.utils.thread.ThreadPoolMonitor;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author huangch
@@ -23,7 +20,8 @@ public class BootTest {
 
     @Test
     public void demo() throws Exception {
-        ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(10, 12, 3, TimeUnit.NANOSECONDS, new LinkedBlockingQueue<>());
-        threadPoolMonitor.register("线程1", threadPoolExecutor);
+        for (int i = 0; i < 4; i++) {
+            System.out.println(IdUtil.getSnowflake().nextIdStr());
+        }
     }
 }

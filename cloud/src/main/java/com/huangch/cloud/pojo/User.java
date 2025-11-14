@@ -1,11 +1,14 @@
 package com.huangch.cloud.pojo;
 
 import com.alibaba.excel.annotation.ExcelProperty;
+import com.huangch.cloud.utils.excel.easyexcel.annotation.ExcelValid;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.io.Serial;
+import java.io.Serializable;
+import java.math.BigDecimal;
 
 /**
  * @author huangch
@@ -14,16 +17,23 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class User {
+public class User implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     @ExcelProperty("姓名")
+    @ExcelValid(required = true)
     private String name;
 
-    @ExcelProperty("年龄")
-    private Integer age;
+    @ExcelProperty("性别")
+    @ExcelValid(required = true)
+    private String gender;
 
-    @ExcelProperty("中共党员")
-    private Boolean userPartyMember = true;
+    @ExcelProperty("生日")
+    @ExcelValid(required = true, datePattern = "yyyy-MM-dd")
+    private String birthday;
 
-    private Date createTime;
+    @ExcelProperty("薪资")
+    private BigDecimal salary;
 }
