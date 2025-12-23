@@ -1,22 +1,64 @@
 package com.huangch.cloud.utils.office;
 
+import com.aspose.words.Document;
+import com.aspose.words.ImportFormatMode;
+import com.aspose.words.License;
+import com.aspose.words.PdfSaveOptions;
+import jakarta.annotation.PostConstruct;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
 import org.apache.xmlbeans.XmlCursor;
+import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 
 /**
  * @author huangch
  * @date 2023-09-24
  */
 @SuppressWarnings("unused")
+@Slf4j
+@Service
 public class WordUtils {
 
     private final static String TABLE_PLACEHOLDER_PATTERN = "^\\{\\{.*\\..*}}$";
+
+    public final String XLS = "xls";
+    public final String XLSX = "xlsx";
+    public final String WORD = "word";
+    public final String PDF = "pdf";
+    public final String UNKNOWN = "unknown";
+
+    @PostConstruct
+    public void postConstruct() throws Exception {
+        License license  = new License();
+        license.setLicense(new ByteArrayInputStream(new byte[]{0}));
+    }
+
+    public void mergeWord(Document source, Document target) {
+        try {
+            source.appendDocument(target, ImportFormatMode.KEEP_SOURCE_FORMATTING);
+            source.updatePageLayout();
+        } catch (Exception e) {
+            log.error("文档处理失败", e);
+            throw new RuntimeException("文档处理失败");
+        }
+    }
+
+    public void word2pdf(Document document, OutputStream os) {
+        try {
+            PdfSaveOptions pdfSaveOptions = new PdfSaveOptions();
+            document.save(os, pdfSaveOptions);
+        } catch (Exception e) {
+            log.error("文档转换失败", e);
+            throw new RuntimeException("文档转换失败");
+        }
+    }
 
     /**
      * 删除word内的批注信息

@@ -1,13 +1,11 @@
-import com.google.common.collect.Lists;
-import com.huangch.cloud.utils.http.HttpUtils;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 /**
  * @author huangch
@@ -16,29 +14,57 @@ import java.util.List;
 @Slf4j
 public class SimpleTest {
 
+    @Test
+    public void test1() throws MalformedURLException {
+    }
+
+    public static String getBaseUrl(String url) {
+        int idx = url.indexOf("?");
+        if (idx == -1) {
+            return url;
+        }
+        return url.substring(0, idx);
+    }
+
     @SneakyThrows
     @Test
     public void test() {
-        String parentIds = "2d3f5476-9f14-4a2a-88d6-79adaa95b07b,";
-        if (StringUtils.isBlank(parentIds) || "-1".equals(parentIds)) {
-            System.out.println("1");
-        }
-        long levels = Lists.newArrayList(parentIds.split(",")).stream().filter(StringUtils::isNotBlank).count() + 1;
-        System.out.println(levels);
+        // 你的 webhook（未加签）
+        String webhook = "https://oapi.dingtalk.com/robot/send?access_token=f734fac1616c13de89b4e918040ce741819ec2768d2d8e84ba42d1f19edb9d1b";
+
+        // 必须包含关键词“热点”，否则钉钉会拒绝
+        String json = "{\n" +
+                "  \"msgtype\": \"actionCard\",\n" +
+                "  \"actionCard\": {\n" +
+                "    \"title\": \"热点 - 任务处理通知\",\n" +
+                "    \"text\": \"### 🔥 热点通知\\n您有一个任务需要处理，请点击查看详情。\",\n" +
+                "    \"btnOrientation\": \"0\",\n" +
+                "    \"btns\": [\n" +
+                "      {\n" +
+                "        \"title\": \"查看详情\",\n" +
+                "        \"actionURL\": \"https://authserver.cjlu.edu.cn/authserver/login?service=http%3A%2F%2Fsjc-zngl.cjlu.edu.cn%2Fns-app-ui%2F%23%2FSingleLogin%3FauditDingTalkBizId%3Dwf202512030330517960870%26redirectUrl%3DauditCenter\"\n" +
+                "      }\n" +
+                "    ]\n" +
+                "  }\n" +
+                "}";
+
+        sendPost(webhook, json);
     }
 
-    @Test
-    public void deleteProcess() throws Exception {
-        List<String> instanceIds = new ArrayList<>();
-        instanceIds.add("d5a19a10-4fd9-11ef-b890-525400d1fae6");
+    // 发送 POST
+    private static void sendPost(String url, String json) throws Exception {
+        URL apiUrl = new URL(url);
+        HttpURLConnection conn = (HttpURLConnection) apiUrl.openConnection();
+        conn.setDoOutput(true);
+        conn.setRequestMethod("POST");
+        conn.setRequestProperty("Content-Type", "application/json;charset=utf-8");
 
-        for (String instanceId : instanceIds) {
+        OutputStream os = conn.getOutputStream();
+        os.write(json.getBytes("utf-8"));
+        os.close();
 
-            HashMap<String, String> params = new HashMap<>();
-            params.put("instanceId", instanceId);
-            params.put("deleteReason", "delete");
-            System.out.println(HttpUtils.sendPost("http://172.17.1.214:30284/workflow/instance/delete", params, new HashMap<>(), String.class));
-        }
+        int code = conn.getResponseCode();
+        System.out.println("钉钉返回状态码：" + code);
     }
 
 }

@@ -1,4 +1,3 @@
-import cn.hutool.core.util.IdUtil;
 import com.huangch.cloud.BootApplication;
 import com.huangch.cloud.utils.thread.ThreadPoolMonitor;
 import jakarta.annotation.Resource;
@@ -20,8 +19,5 @@ public class BootTest {
 
     @Test
     public void demo() throws Exception {
-        for (int i = 0; i < 4; i++) {
-            System.out.println(IdUtil.getSnowflake().nextIdStr());
-        }
     }
 }

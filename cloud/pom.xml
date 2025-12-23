@@ -8,19 +8,6 @@
     </parent>
     <artifactId>cloud</artifactId>
 
-    <repositories>
-        <repository>
-            <id>AsposeJavaAPI</id>
-            <name>Aspose Java API</name>
-            <url>https://releases.aspose.com/java/repo/</url>
-        </repository>
-        <repository>
-            <id>com.e-iceblue</id>
-            <name>e-iceblue</name>
-            <url>https://repo.e-iceblue.com/nexus/content/groups/public/</url>
-        </repository>
-    </repositories>
-
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -107,11 +94,6 @@
             <artifactId>caffeine</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.aspose</groupId>
-            <artifactId>aspose-pdf</artifactId>
-            <version>21.11</version>
-        </dependency>
-        <dependency>
             <groupId>com.deepoove</groupId>
             <artifactId>poi-tl</artifactId>
         </dependency>
@@ -127,8 +109,11 @@
             <groupId>net.bytebuddy</groupId>
             <artifactId>byte-buddy-agent</artifactId>
         </dependency>
-
-
+        <dependency>
+            <groupId>com.aspose</groupId>
+            <artifactId>aspose-words</artifactId>
+            <classifier>jdk17</classifier>
+        </dependency>
     </dependencies>
 
     <build>

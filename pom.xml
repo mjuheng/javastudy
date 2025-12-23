@@ -12,6 +12,19 @@
         <module>base</module>
     </modules>
 
+    <repositories>
+        <repository>
+            <id>AsposeJavaAPI</id>
+            <name>Aspose Java API</name>
+            <url>https://releases.aspose.com/java/repo/</url>
+        </repository>
+        <repository>
+            <id>com.e-iceblue</id>
+            <name>e-iceblue</name>
+            <url>https://repo.e-iceblue.com/nexus/content/groups/public/</url>
+        </repository>
+    </repositories>
+
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
@@ -43,6 +56,7 @@
         <swagger.version>2.9.2</swagger.version>
         <mapstruct.version>1.3.1.FINAL</mapstruct.version>
         <byte-buddy.version>1.15.10</byte-buddy.version>
+        <aspose-word.version>21.11</aspose-word.version>
     </properties>
 
 
@@ -205,6 +219,12 @@
                 <groupId>net.bytebuddy</groupId>
                 <artifactId>byte-buddy-agent</artifactId>
                 <version>${byte-buddy.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.aspose</groupId>
+                <artifactId>aspose-words</artifactId>
+                <version>${aspose-word.version}</version>
+                <classifier>jdk17</classifier>
             </dependency>
         </dependencies>
     </dependencyManagement>
