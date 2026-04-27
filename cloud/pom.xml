@@ -90,6 +90,10 @@
             <artifactId>javassist</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.github.ben-manes.caffeine</groupId>
             <artifactId>caffeine</artifactId>
         </dependency>
@@ -113,6 +117,10 @@
             <groupId>com.aspose</groupId>
             <artifactId>aspose-words</artifactId>
             <classifier>jdk17</classifier>
+        </dependency>
+        <dependency>
+            <groupId>com.aspose</groupId>
+            <artifactId>aspose-cells</artifactId>
         </dependency>
     </dependencies>
 

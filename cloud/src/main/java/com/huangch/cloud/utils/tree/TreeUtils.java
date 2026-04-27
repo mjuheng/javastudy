@@ -6,6 +6,7 @@ import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
@@ -190,4 +191,82 @@ public class TreeUtils {
         }
     }
 
+    /**
+     * 过滤树结构中的节点
+     *
+     * @param treeNodes         树节点列表
+     * @param filter            过滤条件，返回true表示保留该节点
+     * @param keepParent        是否保留未命中的父节点（当子节点命中时）
+     * @param getChildrenColumn 获取子节点列表的函数
+     * @param setChildrenColumn 设置子节点列表的函数
+     * @param <TN>              树节点类型
+     * @param <C>               子节点列表类型
+     * @return 过滤后的树节点列表
+     */
+    public static <TN, C extends List<TN>> List<TN> filter(List<TN> treeNodes,
+                                                           Predicate<TN> filter,
+                                                           boolean keepParent,
+                                                           Function<TN, C> getChildrenColumn,
+                                                           BiConsumer<TN, C> setChildrenColumn) {
+        if (CollUtil.isEmpty(treeNodes)) {
+            return Collections.emptyList();
+        }
+
+        List<TN> result = new ArrayList<>();
+        for (TN node : treeNodes) {
+            TN filteredNode = filterNode(node, filter, keepParent, getChildrenColumn, setChildrenColumn);
+            if (filteredNode != null) {
+                result.add(filteredNode);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 递归过滤单个节点及其子节点
+     *
+     * @param node              当前节点
+     * @param filter            过滤条件
+     * @param keepParent        是否保留未命中的父节点
+     * @param getChildrenColumn 获取子节点列表的函数
+     * @param setChildrenColumn 设置子节点列表的函数
+     * @param <TN>              树节点类型
+     * @param <C>               子节点列表类型
+     * @return 过滤后的节点，如果该节点及其子节点都不满足条件则返回null
+     */
+    private static <TN, C extends List<TN>> TN filterNode(TN node,
+                                                          Predicate<TN> filter,
+                                                          boolean keepParent,
+                                                          Function<TN, C> getChildrenColumn,
+                                                          BiConsumer<TN, C> setChildrenColumn) {
+        List<TN> children = getChildrenColumn.apply(node);
+        List<TN> filteredChildren = new ArrayList<>();
+
+        if (CollUtil.isNotEmpty(children)) {
+            for (TN child : children) {
+                TN filteredChild = filterNode(child, filter, keepParent, getChildrenColumn, setChildrenColumn);
+                if (filteredChild != null) {
+                    filteredChildren.add(filteredChild);
+                }
+            }
+        }
+
+        boolean selfMatch = filter.test(node);
+        boolean childMatch = CollUtil.isNotEmpty(filteredChildren);
+
+        // 情况 1：自己命中
+        if (selfMatch) {
+            setChildrenColumn.accept(node, (C) filteredChildren);
+            return node;
+        }
+
+        // 情况 2：自己没命中，但子节点命中
+        if (childMatch && keepParent) {
+            setChildrenColumn.accept(node, (C) filteredChildren);
+            return node;
+        }
+
+        // 情况 3：都没命中
+        return null;
+    }
 }

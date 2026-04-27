@@ -137,6 +137,52 @@ public class ZipUtils {
         }
     }
 
+    /**
+     * 解压文件
+     *
+     * @param in      压缩包输入流
+     * @param destDir 解压目录
+     * @throws Exception exception
+     */
+    public static void unZip(InputStream in, String destDir) throws Exception {
+        File baseDir = new File(destDir);
+
+        try (ZipInputStream zis = new ZipInputStream(in)) {
+            ZipEntry entry;
+
+            while ((entry = zis.getNextEntry()) != null) {
+                File newFile = new File(baseDir, entry.getName());
+
+                // 🔒 防止 Zip Slip 漏洞（非常重要）
+                String destDirPath = baseDir.getCanonicalPath();
+                String destFilePath = newFile.getCanonicalPath();
+                if (!destFilePath.startsWith(destDirPath + File.separator)) {
+                    throw new IOException("非法压缩路径: " + entry.getName());
+                }
+
+                if (entry.isDirectory()) {
+                    // 目录
+                    newFile.mkdirs();
+                } else {
+                    // 文件
+                    File parent = newFile.getParentFile();
+                    if (!parent.exists()) {
+                        parent.mkdirs();
+                    }
+
+                    try (FileOutputStream fos = new FileOutputStream(newFile)) {
+                        byte[] buffer = new byte[8192];
+                        int len;
+                        while ((len = zis.read(buffer)) != -1) {
+                            fos.write(buffer, 0, len);
+                        }
+                    }
+                }
+                zis.closeEntry();
+            }
+        }
+    }
+
 
     /**
      * 从下载文件并压缩

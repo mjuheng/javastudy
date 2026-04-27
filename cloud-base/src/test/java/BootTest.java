@@ -1,4 +1,3 @@
-import cn.hutool.core.io.FileUtil;
 import com.huangch.BaseApplication;
 import com.huangch.base.service.StudentService;
 import org.junit.jupiter.api.Test;
@@ -18,7 +17,7 @@ public class BootTest {
 
     @Test
     public void test() throws Exception {
-        System.out.println(FileUtil.mainName("aaaa.xlsx"));
+        "111".replaceAll("11", null);
     }
 
 }

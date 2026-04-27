@@ -226,6 +226,11 @@
                 <version>${aspose-word.version}</version>
                 <classifier>jdk17</classifier>
             </dependency>
+            <dependency>
+                <groupId>com.aspose</groupId>
+                <artifactId>aspose-cells</artifactId>
+                <version>${aspose-word.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

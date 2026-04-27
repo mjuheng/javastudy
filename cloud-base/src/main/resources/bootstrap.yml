@@ -12,7 +12,6 @@ spring:
         enabled: false
       config:
         enabled: false
-
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.jdbc.Driver
@@ -26,6 +25,44 @@ spring:
         username: root
         password: 123456
 
+
+  feign:
+    url:
+      ns-base: http://172.17.1.196:8018/zjj-ns-base/
+  main:
+    allow-bean-definition-overriding: true
+fzhx:
+  core:
+    app-code: NS001
+    cors: true
+  orm:
+    use-default-key: true
+    default-key-type: STRING_SNOWFLAKE
+  iam:
+    default-login: true
+    enable-login-controller: true
+    token:
+      # 密钥
+      secret: RlpIWF9JQU1fS0VZ
+      refresh-secret: RlpIWF9JQU1fS0VZ
+      store:
+        enable: true
+        store-type: 0
+    exclude-path: /ns/plan-prj-total/selType
+  bind:
+    # 是否启动，默认开启
+    enabled: true
+    # 是否启用 aop 注解方式，默认开启
+    aop-enabled: true
+  multitask:
+    #是否开启定时调度任务能力
+    enable-schedule: true
+    #定时任务线程池大小
+    scheduler-pool-size: 20
+    # 线程的核心数
+    thread-core-size: 20
+    # 最大运行的任务组数
+    max-task-group-size: 2
 minio:
   endpoint: http://localhost:9000
   access-key: minioadmin

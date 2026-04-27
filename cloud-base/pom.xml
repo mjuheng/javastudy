@@ -93,9 +93,14 @@
             <artifactId>springfox-swagger2</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.zyaud.idata</groupId>
-            <artifactId>idata-wte-client</artifactId>
-            <version>2.1.2-SNAPSHOT</version>
+            <groupId>com.zyaud.ns</groupId>
+            <artifactId>zjj-ns-base-client</artifactId>
+            <version>0.0.1-SNAPSHOT-TMP-20251223161959704</version>
+        </dependency>
+        <dependency>
+            <groupId>com.zyaud.fzhx</groupId>
+            <artifactId>fzhx-starter-web</artifactId>
+            <version>1.7.4-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>

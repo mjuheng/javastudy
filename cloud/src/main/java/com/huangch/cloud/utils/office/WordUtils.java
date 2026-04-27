@@ -1,9 +1,9 @@
 package com.huangch.cloud.utils.office;
 
-import com.aspose.words.Document;
-import com.aspose.words.ImportFormatMode;
-import com.aspose.words.License;
-import com.aspose.words.PdfSaveOptions;
+import cn.hutool.core.io.IoUtil;
+import com.aspose.cells.Workbook;
+import com.aspose.cells.WorksheetCollection;
+import com.aspose.words.*;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
@@ -106,6 +106,46 @@ public class WordUtils {
         targetRun.setBold(sourceRun.isBold());
         targetRun.setColor(sourceRun.getColor());
         targetRun.setImprinted(sourceRun.isImprinted());
+    }
+
+    public void file2Pdf(byte[] fileContent, String fileExt, OutputStream os) throws Exception {
+        if (fileContent == null || fileContent.length == 0) {
+            throw new RuntimeException("文件内容不能为空");
+        }
+
+        if (!"xls".equalsIgnoreCase(fileExt)
+                && !"xlsx".equalsIgnoreCase(fileExt)) {
+            throw new RuntimeException("仅支持 Excel 文件转 PDF");
+        }
+
+        ByteArrayInputStream inputStream =
+                new ByteArrayInputStream(fileContent);
+
+        Workbook workbook = new Workbook(inputStream);
+
+        // 可选：自动适应列宽
+        WorksheetCollection sheets = workbook.getWorksheets();
+        for (int i = 0; i < sheets.getCount(); i++) {
+            sheets.get(i).autoFitColumns();
+        }
+
+        com.aspose.cells.PdfSaveOptions options = new com.aspose.cells.PdfSaveOptions();
+
+        // 所有列压缩到一页宽（推荐）
+        options.setAllColumnsInOnePagePerSheet(true);
+
+        workbook.save(os, options);
+    }
+
+    public Document file2Document(byte[] fileContent, String fileExt) throws Exception {
+        ByteArrayInputStream archiveFileStream = IoUtil.toStream(fileContent);
+        if (XLS.equals(fileExt) || XLSX.equals(fileExt)) {
+            com.aspose.cells.Workbook book = new com.aspose.cells.Workbook(archiveFileStream);
+            ByteArrayOutputStream documentStream = new ByteArrayOutputStream();
+            book.save(documentStream, SaveFormat.DOCX);
+            return new Document(new ByteArrayInputStream(documentStream.toByteArray()));
+        }
+        return new Document(archiveFileStream);
     }
 
 }
