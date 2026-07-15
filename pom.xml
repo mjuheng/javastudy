@@ -10,6 +10,7 @@
         <module>cloud-base</module>
         <module>cloud-gateway</module>
         <module>base</module>
+        <module>zyaud</module>
     </modules>
 
     <repositories>

@@ -1,3 +1,5 @@
+package fzhx;
+
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtMethod;
@@ -12,8 +14,7 @@ import java.security.ProtectionDomain;
 @SuppressWarnings("CallToPrintStackTrace")
 public class ZyaudFsCronAgent {
 
-    public static void premain(String args, Instrumentation instrumentation) {
-        System.out.println("hello java agent " + args);
+    public static void register(Instrumentation instrumentation) {
 
         // 在 agent 加载时，向 JVM 添加一个字节码转换器
         instrumentation.addTransformer(new ClassFileTransformer() {
@@ -42,6 +43,20 @@ public class ZyaudFsCronAgent {
                         CtClass ctClass = classPool.makeClass(new java.io.ByteArrayInputStream(classfileBuffer));
 
                         CtMethod method = ctClass.getDeclaredMethod("run");
+                        method.setBody("{  }");
+
+                        // 返回修改后的字节码
+                        return ctClass.toBytecode();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                if ("com.zyaud.ns.base.core.document.scheduled.DocumentScheduled".equals(classNameFormatted)) {
+                    try {
+                        ClassPool classPool = ClassPool.getDefault();
+                        CtClass ctClass = classPool.makeClass(new java.io.ByteArrayInputStream(classfileBuffer));
+
+                        CtMethod method = ctClass.getDeclaredMethod("updateEvidenceFileId");
                         method.setBody("{  }");
 
                         // 返回修改后的字节码

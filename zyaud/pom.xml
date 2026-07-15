@@ -54,7 +54,7 @@
                 <configuration>
                     <archive>
                         <manifestEntries>
-                            <Premain-Class>ZyaudFsCronAgent</Premain-Class>
+                            <Premain-Class>MainAgent</Premain-Class>
                         </manifestEntries>
                     </archive>
                 </configuration>
