@@ -1,4 +1,4 @@
-import com.aspose.words.Document;
+import cn.hutool.core.util.StrUtil;
 import com.huangch.cloud.BootApplication;
 import com.huangch.cloud.utils.office.WordUtils;
 import com.huangch.cloud.utils.thread.ThreadPoolMonitor;
@@ -7,7 +7,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.io.FileInputStream;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author huangch
@@ -25,9 +27,12 @@ public class BootTest {
 
     @Test
     public void demo() throws Exception {
-        FileInputStream fileInputStream = new FileInputStream("C:\\Users\\36020\\Desktop\\协审考评表1.xlsx");
-        // wordUtils.file2Pdf(fileInputStream.readAllBytes(), "xlsx", new FileOutputStream("C:\\Users\\36020\\Desktop\\协审考评表pdf.pdf"));
-        Document document = wordUtils.file2Document(fileInputStream.readAllBytes(), "xlsx");
-        document.save("C:\\Users\\36020\\Desktop\\协审考评表.docx");
+        String parentIds = "9111000071093107XN,91650000789879971H";
+        List<String> parentIdList = Arrays.stream(parentIds.split(","))
+                .filter(StrUtil::isNotBlank)
+                .collect(Collectors.toList());
+        if(parentIdList.size()>1){
+            System.out.println(parentIdList.get(1));
+        }
     }
 }

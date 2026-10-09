@@ -1,7 +1,9 @@
-import cn.hutool.core.util.IdUtil;
+import com.google.common.collect.Sets;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
+
+import java.util.HashSet;
 
 /**
  * @author huangch
@@ -13,6 +15,8 @@ public class SimpleTest {
     @SneakyThrows
     @Test
     public void test() {
-        System.out.println(IdUtil.getSnowflake().nextIdStr());
+        HashSet<?> objects = Sets.newHashSet("1", "2");
+        HashSet<?> objectsa = Sets.newHashSet("2", "1");
+        System.out.println(objects.equals(objectsa));
     }
 }
